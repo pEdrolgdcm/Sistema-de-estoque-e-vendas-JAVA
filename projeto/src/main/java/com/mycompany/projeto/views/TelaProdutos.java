@@ -49,7 +49,7 @@ public class TelaProdutos extends javax.swing.JFrame {
         btnCancelarCadastroProduto = new javax.swing.JButton();
         pnlConsultaProduto = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNomeProduto = new javax.swing.JTextField();
         btnPesquisarProduto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProdutos = new javax.swing.JTable();
@@ -164,6 +164,12 @@ public class TelaProdutos extends javax.swing.JFrame {
 
         jLabel5.setText("Nome:");
 
+        txtNomeProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNomeProdutoActionPerformed(evt);
+            }
+        });
+
         btnPesquisarProduto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icone_lupa.png"))); // NOI18N
         btnPesquisarProduto.setText("Pesquisar");
         btnPesquisarProduto.addActionListener(new java.awt.event.ActionListener() {
@@ -212,7 +218,7 @@ public class TelaProdutos extends javax.swing.JFrame {
                     .addGroup(pnlConsultaProdutoLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1)))
+                        .addComponent(txtNomeProduto)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlConsultaProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnPesquisarProduto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -227,7 +233,7 @@ public class TelaProdutos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlConsultaProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPesquisarProduto))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlConsultaProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -266,17 +272,38 @@ public class TelaProdutos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtValorProdutoCadastroActionPerformed
 
     private void btnPesquisarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarProdutoActionPerformed
+        String nomePesquisa = txtNomeProduto.getText().trim();
         ArrayList<Produto> lista = ProdutoDAO.listar();
         DefaultTableModel modeloTabela = (DefaultTableModel) tblProdutos.getModel();
         modeloTabela.setRowCount(0);
-        for (Produto item : lista) {
-            modeloTabela.addRow(new String[]{
-                String.valueOf(item.getIdProduto()),
-                String.valueOf(item.getCodProduto()),
-                item.getNomeProduto(),
-                String.valueOf(item.getValorProduto()),
-                String.valueOf(item.getQtdProduto()),
-            });
+
+        if (!nomePesquisa.isEmpty()) {
+            boolean encontrou = false;
+            for (Produto item : lista) {
+                if (item.getNomeProduto().toLowerCase().contains(nomePesquisa.toLowerCase())) {
+                    modeloTabela.addRow(new String[]{
+                        String.valueOf(item.getIdProduto()),
+                        String.valueOf(item.getCodProduto()),
+                        item.getNomeProduto(),
+                        String.valueOf(item.getValorProduto()),
+                        String.valueOf(item.getQtdProduto())
+                    });
+                    encontrou = true;
+                }
+            }
+            if (!encontrou) {
+                JOptionPane.showMessageDialog(rootPane, "Nenhum produto encontrado com o nome informado!");
+            }
+        } else {
+            for (Produto item : lista) {
+                modeloTabela.addRow(new String[]{
+                    String.valueOf(item.getIdProduto()),
+                    String.valueOf(item.getCodProduto()),
+                    item.getNomeProduto(),
+                    String.valueOf(item.getValorProduto()),
+                    String.valueOf(item.getQtdProduto())
+                });
+            }
         }
     }//GEN-LAST:event_btnPesquisarProdutoActionPerformed
 
@@ -367,6 +394,10 @@ public class TelaProdutos extends javax.swing.JFrame {
         }
         }
     }//GEN-LAST:event_btnConfirmarCadastroProdutoActionPerformed
+
+    private void txtNomeProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeProdutoActionPerformed
+        
+    }//GEN-LAST:event_txtNomeProdutoActionPerformed
     public void atualizarTabela(){
             ArrayList<Produto> lista = ProdutoDAO.listar();
             DefaultTableModel modeloTabela = (DefaultTableModel) tblProdutos.getModel();
@@ -430,13 +461,13 @@ public class TelaProdutos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblIDProduto;
     private javax.swing.JPanel pnlCadastroProduto;
     private javax.swing.JPanel pnlConsultaProduto;
     private javax.swing.JTabbedPane pnlGuiasProduto;
     private javax.swing.JTable tblProdutos;
     private javax.swing.JTextField txtCodigoProdutoCadastro;
+    private javax.swing.JTextField txtNomeProduto;
     private javax.swing.JTextField txtNomeProdutoCadastro;
     private javax.swing.JTextField txtQtdProdutoCadastro;
     private javax.swing.JTextField txtValorProdutoCadastro;

@@ -162,6 +162,12 @@ public class TelaClientes extends javax.swing.JFrame {
 
         jLabel5.setText("Nome:");
 
+        txtNomeConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNomeConsultarActionPerformed(evt);
+            }
+        });
+
         btnPesquisarNomeCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icone_lupa.png"))); // NOI18N
         btnPesquisarNomeCliente.setText("Pesquisar");
         btnPesquisarNomeCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -255,7 +261,7 @@ public class TelaClientes extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlGuiasCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+            .addComponent(pnlGuiasCliente)
         );
 
         pack();
@@ -274,9 +280,29 @@ public class TelaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEmailCadastroActionPerformed
 
     private void btnPesquisarNomeClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarNomeClienteActionPerformed
-        ArrayList<Cliente> lista = ClienteDAO.listar();
-        DefaultTableModel modeloTabela = (DefaultTableModel) tblClientes.getModel();
-        modeloTabela.setRowCount(0);
+    String nomePesquisa = txtNomeConsultar.getText().trim();
+    ArrayList<Cliente> lista = ClienteDAO.listar();
+    DefaultTableModel modeloTabela = (DefaultTableModel) tblClientes.getModel();
+    modeloTabela.setRowCount(0);
+
+    if (!nomePesquisa.isEmpty()) {
+        boolean encontrou = false;
+        for (Cliente item : lista) {
+            if (item.getNomeCliente().toLowerCase().contains(nomePesquisa.toLowerCase())) {
+                modeloTabela.addRow(new String[]{
+                    String.valueOf(item.getIdCliente()),
+                    item.getCPF(),
+                    item.getNomeCliente(),
+                    item.getEmailCliente()
+                });
+                encontrou = true;
+            }
+        }
+        if (!encontrou) {
+            JOptionPane.showMessageDialog(rootPane, "Nenhum cliente encontrado com o nome informado!");
+        }
+    } else {
+
         for (Cliente item : lista) {
             modeloTabela.addRow(new String[]{
                 String.valueOf(item.getIdCliente()),
@@ -285,6 +311,7 @@ public class TelaClientes extends javax.swing.JFrame {
                 item.getEmailCliente()
             });
         }
+    }
     }//GEN-LAST:event_btnPesquisarNomeClienteActionPerformed
 
     private void btnConfirmarCadastroClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarCadastroClienteActionPerformed
@@ -367,6 +394,10 @@ public class TelaClientes extends javax.swing.JFrame {
     private void btnAdicionarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAdicionarClienteActionPerformed
+
+    private void txtNomeConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeConsultarActionPerformed
+        
+    }//GEN-LAST:event_txtNomeConsultarActionPerformed
     
     public void atualizarTabela(){
         ArrayList<Cliente> lista = ClienteDAO.listar();
