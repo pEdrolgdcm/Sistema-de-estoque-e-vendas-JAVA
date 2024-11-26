@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 public class VendaDAO {
         static String URL = "jdbc:mysql://localhost:3306/projeto";
         static String login = "root";
-        static String senha = "Tennerpotter_1";
+        static String senha = "ravi080103";
     public static boolean salvar(Venda obj){     
             Connection conexao = null;
             boolean retorno = false;

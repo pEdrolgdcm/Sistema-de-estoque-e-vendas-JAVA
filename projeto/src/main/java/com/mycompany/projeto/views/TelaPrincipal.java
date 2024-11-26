@@ -430,19 +430,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        Date dataInicio = jdcDataInicio.getDate();
-        Date dataTermino = jdcDataTermino.getDate();
-        ArrayList<RelatorioSintetico> lista = RelatorioSinteticoDAO.listarPorPeriodo(dataInicio, dataTermino);
-        DefaultTableModel modelo = (DefaultTableModel) tblRelatorioSintetico.getModel();
-        modelo.setRowCount(0);
-        for (RelatorioSintetico item:lista){
-            modelo.addRow(new String[]{
-                String.valueOf(item.getIdVenda()),
-                String.valueOf(item.getDataVenda()),
-                item.getNomeCliente(),
-                String.valueOf(item.getValorVenda())
+    Date dataInicio = jdcDataInicio.getDate();
+    Date dataTermino = jdcDataTermino.getDate();
+    ArrayList<RelatorioSintetico> lista = RelatorioSinteticoDAO.listarPorPeriodo(dataInicio, dataTermino);
+    DefaultTableModel modelo = (DefaultTableModel) tblRelatorioSintetico.getModel();
+    modelo.setRowCount(0);
+    double valorTotal = 0.0;
+    for (RelatorioSintetico item : lista) {
+        modelo.addRow(new String[]{
+            String.valueOf(item.getIdVenda()),
+            String.valueOf(item.getDataVenda()),
+            item.getNomeCliente(),
+            String.valueOf(item.getValorVenda())
         });
-        }
+        valorTotal += item.getValorVenda();
+    }
+    lblValorTotalPeriodo.setText(String.format("%.2f", valorTotal));
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnDetalhesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetalhesActionPerformed
@@ -509,6 +512,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
         boolean retorno = VendaDAO.salvar(objVenda);
         if(retorno){
             JOptionPane.showMessageDialog(rootPane, "Venda realizada com sucesso!");
+            txtCPF.setText("");
+            lblNomeCliente.setText("");
+            valorTotal = 0;
+            lblValorTotal.setText("0.00");
+            DefaultTableModel modeloVenda = (DefaultTableModel) tblVenda.getModel();
+            modeloVenda.setRowCount(0);
+            jdcDataInicio.setDate(null);
+            jdcDataTermino.setDate(null);
+            cboProdutos.setSelectedIndex(0);
+            spnQtd.setValue(0);
         }else{
             JOptionPane.showMessageDialog(rootPane, "Falha na venda!");
         }

@@ -18,7 +18,7 @@ public class ProdutoDAO {
     
     static String URL = "jdbc:mysql://localhost:3306/projeto";
     static String login = "root";
-    static String senha = "Tennerpotter_1";
+    static String senha = "ravi080103";
     
     
     public static boolean salvar(Produto obj){
